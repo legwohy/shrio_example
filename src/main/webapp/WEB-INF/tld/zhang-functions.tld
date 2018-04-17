@@ -3,16 +3,32 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
         version="2.0">
+    <!-- tld标签类的描述文件  自定义标签 引入值-->
     <description>functions</description>
     <tlib-version>3.0</tlib-version>
+
+    <!-- 标签前缀-->
     <short-name>fn</short-name>
+
+    <!-- 在jsp中通过taglib标签引入此tld文件使用的url-->
     <uri>http://github.com/zhangkaitao/tags/zhang-functions</uri>
 
     <function>
+        <!-- 标签描述-->
         <description>obj in collection</description>
+
+        <!-- 标签名    jsp标签中：<前缀:标签名><fn:in> -->
         <name>in</name>
+
+        <!-- 方法名所在的实体路径-->
         <function-class>com.shiro.chapter16.web.taglib.Functions</function-class>
+
+        <!-- 方法名且必须是静态方法 返回值boolean 方法名in 参数类型 object-->
         <function-signature>boolean in(java.lang.Iterable,java.lang.Object)</function-signature>
+
+        <!-- 实例-->
+        <example>${fn:in(迭代参数,元素)}</example>
+
     </function>
 
     <function>
@@ -20,6 +36,7 @@
         <name>organizationName</name>
         <function-class>com.shiro.chapter16.web.taglib.Functions</function-class>
         <function-signature>java.lang.String organizationName(java.lang.Long)</function-signature>
+        <example>${fn:organizationName(typeCode)}</example>
     </function>
     <function>
         <description>根据id列表显示多个组织机构名称</description>

@@ -11,9 +11,7 @@ import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * <p>User: Zhang Kaitao
- * <p>Date: 14-1-28
- * <p>Version: 1.0
+ * 登陆检查与权限校验
  */
 public class UserRealm extends AuthorizingRealm {
 
@@ -42,10 +40,8 @@ public class UserRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-
-        String username = (String)token.getPrincipal();
-
-        User user = userService.findByUsername(username);
+        String username = (String)token.getPrincipal();// 取出登陆名
+        User user = userService.findByUsername(username);// 通过用户名查询用户
 
         if(user == null) {
             throw new UnknownAccountException();//没找到帐号
@@ -55,7 +51,8 @@ public class UserRealm extends AuthorizingRealm {
             throw new LockedAccountException(); //帐号锁定
         }
 
-        //交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配，如果觉得人家的不好可以自定义实现
+        //交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配，
+        // 如果觉得人家的不好可以自定义实现
         SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
                 user.getUsername(), //用户名
                 user.getPassword(), //密码

@@ -12,12 +12,16 @@ import org.springframework.util.CollectionUtils;
 import java.util.Collection;
 
 /**
- * <p>User: Zhang Kaitao
- * <p>Date: 14-2-15
- * <p>Version: 1.0
+ * 自定义标签
  */
 public class Functions {
 
+    /**
+     * 包含
+     * @param iterable
+     * @param element
+     * @return
+     */
     public static boolean in(Iterable iterable, Object element) {
         if(iterable == null) {
             return false;
@@ -25,6 +29,11 @@ public class Functions {
         return CollectionUtils.contains(iterable.iterator(), element);
     }
 
+    /**
+     * 通过id查询组织名字
+     * @param organizationId
+     * @return
+     */
     public static String organizationName(Long organizationId) {
         Organization organization = getOrganizationService().findOne(organizationId);
         if(organization == null) {
@@ -33,6 +42,11 @@ public class Functions {
         return organization.getName();
     }
 
+    /**
+     * 组织名字叠加
+     * @param organizationIds
+     * @return
+     */
     public static String organizationNames(Collection<Long> organizationIds) {
         if(CollectionUtils.isEmpty(organizationIds)) {
             return "";

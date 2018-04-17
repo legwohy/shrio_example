@@ -1,7 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="zhagfn" uri="http://www.springframework.org/tags" %>
+
+<!-- 引入自定义的tld文件-->
 <%@taglib prefix="zhangfn" uri="http://github.com/zhangkaitao/tags/zhang-functions" %>
+
 <%
     String path = request.getContextPath();
 %>
@@ -16,7 +20,6 @@
 
 </head>
 <body>
-
     <form:form method="post" commandName="role">
         <form:hidden path="id"/>
         <form:hidden path="available"/>
@@ -43,7 +46,6 @@
 
     </form:form>
 
-
     <div id="menuContent" class="menuContent" style="display:none; position: absolute;">
         <ul id="tree" class="ztree" style="margin-top:0; width:160px;"></ul>
     </div>
@@ -53,23 +55,30 @@
     <script>
         $(function () {
             var setting = {
-                check: {
-                    enable: true ,
-                    chkboxType: { "Y": "", "N": "" }
+                check: {// tree在点击时的相关设置
+                    enable: true ,// 是否显示单选框radio还是复选框checkBox
+                    checkboxType: { "Y": "", "N": "" }// YN分别表示复选框勾或取消 ps分别表示操作会影响父子节点
                 },
-                view: {
-                    dblClickExpand: false
+                view: {// tree的显示状态
+                    dblClickExpand: false// 双击节点不自动展开
                 },
-                data: {
+                data: {// tree的数据格式
                     simpleData: {
-                        enable: true
+                        enable: true// 使用简单的数据格式
                     }
                 },
                 callback: {
-                    onCheck: onCheck
+                    onCheck: onCheck// 捕获checkbox和radiod勾选或取消时的回调函数
                 }
             };
 
+            /**
+             * id 当前节点id  唯一
+             * pid 父节点id   若为null 则当前节点为顶节点
+             * name 当前节点名称
+             * childred 子节点(子节点也是json格式) 通常情况四个属性
+             * @type {[*]}
+             */
             var zNodes =[
                 <c:forEach items="${resourceList}" var="r">
                 <c:if test="${not r.rootNode}">
@@ -79,8 +88,8 @@
             ];
 
             function onCheck(e, treeId, treeNode) {
-                var zTree = $.fn.zTree.getZTreeObj("tree"),
-                        nodes = zTree.getCheckedNodes(true),
+                var zTree = $.fn.zTree.getZTreeObj("tree"),// 必须在init之后方可使用此方法 获取id为tree的对象 该对象是全局的
+                        nodes = zTree.getCheckedNodes(true),//
                         id = "",
                         name = "";
                 nodes.sort(function compare(a,b){return a.id-b.id;});
@@ -112,7 +121,7 @@
                 }
             }
 
-            $.fn.zTree.init($("#tree"), setting, zNodes);
+            $.fn.zTree.init($("#tree"), setting, zNodes);// 初始化
             $("#menuBtn").click(showMenu);
         });
     </script>

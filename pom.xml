@@ -121,7 +121,7 @@
             <version>${spring.version}</version>
         </dependency>
 
-
+        <!-- tomcat自带的jsp-api 支持自定义jsp标签必须引入-->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
