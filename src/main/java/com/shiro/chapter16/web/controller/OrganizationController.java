@@ -21,8 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/organization")
 public class OrganizationController {
 
-    @Autowired
-    private OrganizationService organizationService;
+    @Autowired private OrganizationService organizationService;
 
     @RequiresPermissions("organization:view")
     @RequestMapping(method = RequestMethod.GET)

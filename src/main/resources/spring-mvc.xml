@@ -11,7 +11,7 @@
        http://www.springframework.org/schema/mvc
        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
-    <context:property-placeholder location="classpath:resources.properties"/>
+    <context:property-placeholder location="classpath:jdbc.properties"/>
 
     <!-- 开启controller注解支持 -->
     <!-- 注意事项请参考：http://jinnianshilongnian.iteye.com/blog/1762632 -->

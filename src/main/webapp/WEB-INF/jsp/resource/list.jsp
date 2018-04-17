@@ -1,12 +1,15 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
+<%
+    String path = request.getContextPath();
+%>
 <html>
 <head>
     <title></title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/css.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/jquery-treetable/stylesheets/jquery.treetable.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/jquery-treetable/stylesheets/jquery.treetable.theme.default.css">
+    <link rel="stylesheet" href="<%=path%>/static/css/css.css">
+    <link rel="stylesheet" href="<%=path%>/static/jquery-treetable/stylesheets/jquery.treetable.css">
+    <link rel="stylesheet" href="<%=path%>/static/jquery-treetable/stylesheets/jquery.treetable.theme.default.css">
     <style>
         #table th, #table td {
             font-size: 14px;

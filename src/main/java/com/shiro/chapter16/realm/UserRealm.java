@@ -19,6 +19,11 @@ public class UserRealm extends AuthorizingRealm {
 
     @Autowired private UserService userService;
 
+    /**
+     * 权限校验
+     * @param principals
+     * @return
+     */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         String username = (String)principals.getPrimaryPrincipal();
@@ -29,6 +34,12 @@ public class UserRealm extends AuthorizingRealm {
         return authorizationInfo;
     }
 
+    /**
+     * 登陆校验
+     * @param token
+     * @return
+     * @throws AuthenticationException
+     */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
 

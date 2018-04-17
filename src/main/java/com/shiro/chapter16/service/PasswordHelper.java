@@ -35,6 +35,10 @@ public class PasswordHelper {
         this.hashIterations = hashIterations;
     }
 
+    /**
+     * 加密
+     * @param user
+     */
     public void encryptPassword(User user) {
 
         user.setSalt(randomNumberGenerator.nextBytes().toHex());

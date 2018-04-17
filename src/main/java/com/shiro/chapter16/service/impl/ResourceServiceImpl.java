@@ -22,8 +22,7 @@ import java.util.Set;
 
 public class ResourceServiceImpl implements ResourceService {
 
-    @Autowired
-    private ResourceDao resourceDao;
+    @Autowired private ResourceDao resourceDao;
 
     @Override
     public Resource createResource(Resource resource) {

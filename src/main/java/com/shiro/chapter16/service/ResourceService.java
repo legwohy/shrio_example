@@ -13,9 +13,9 @@ import java.util.Set;
 public interface ResourceService {
 
 
-    public Resource createResource(Resource resource);
-    public Resource updateResource(Resource resource);
-    public void deleteResource(Long resourceId);
+    Resource createResource(Resource resource);
+    Resource updateResource(Resource resource);
+    void deleteResource(Long resourceId);
 
     Resource findOne(Long resourceId);
     List<Resource> findAll();

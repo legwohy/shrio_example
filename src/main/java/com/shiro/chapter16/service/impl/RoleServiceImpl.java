@@ -20,10 +20,8 @@ import java.util.Set;
 
 public class RoleServiceImpl implements RoleService {
 
-    @Autowired
-    private RoleDao roleDao;
-    @Autowired
-    private ResourceService resourceService;
+    @Autowired private RoleDao roleDao;
+    @Autowired private ResourceService resourceService;
 
     public Role createRole(Role role) {
         return roleDao.createRole(role);

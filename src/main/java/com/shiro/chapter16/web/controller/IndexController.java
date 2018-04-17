@@ -14,17 +14,13 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * <p>User: Zhang Kaitao
- * <p>Date: 14-2-14
- * <p>Version: 1.0
+ *
  */
 @Controller
 public class IndexController {
 
-    @Autowired
-    private ResourceService resourceService;
-    @Autowired
-    private UserService userService;
+    @Autowired private ResourceService resourceService;
+    @Autowired private UserService userService;
 
     @RequestMapping("/")
     public String index(@CurrentUser User loginUser, Model model) {
