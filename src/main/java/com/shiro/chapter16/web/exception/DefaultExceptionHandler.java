@@ -9,9 +9,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
- * <p>User: Zhang Kaitao
- * <p>Date: 14-2-12
- * <p>Version: 1.0
+ * 自定义全局异常 controller不做异常处理，若出现异常直接泡给DefaultExceptionHandler，然后根据异常的种类依次处理返回
  */
 @ControllerAdvice
 public class DefaultExceptionHandler {
@@ -20,8 +18,8 @@ public class DefaultExceptionHandler {
      * <p/>
      * 后续根据不同的需求定制即可
      */
-    @ExceptionHandler({UnauthorizedException.class})
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler({UnauthorizedException.class})// 捕获 未授权异常数组 很多异常
+    @ResponseStatus(value = HttpStatus.UNAUTHORIZED,reason = "未授权")// 异常返回的状态码和值
     public ModelAndView processUnauthenticatedException(NativeWebRequest request, UnauthorizedException e) {
         ModelAndView mv = new ModelAndView();
         mv.addObject("exception", e);

@@ -68,7 +68,7 @@
                     }
                 },
                 callback: {
-                    onCheck: onCheck// 捕获checkbox和radiod勾选或取消时的回调函数
+                    onCheck: onCheck// 捕获checkbox和radio的勾选或取消时的回调函数
                 }
             };
 

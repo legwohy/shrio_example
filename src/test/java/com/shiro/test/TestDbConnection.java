@@ -23,10 +23,10 @@ public class TestDbConnection {
 
     /** 测试数据库连接*/
     @Test public void testDbConnection() throws IOException, SQLException, ClassNotFoundException {
-        String driverName = "com.mysql.jdbc.Driver";
+        String driverName = "com.mysql.cj.jdbc.Driver";
         String userName = "cobra";
         String password = "Z&Tc1234567890";
-        String url = "jdbc:mysql://192.168.6.163:3306/shiro?useUnicode=true&characterEncoding=UTF-8";
+        String url = "jdbc:mysql://192.168.6.163:3306/shiro?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
         Class.forName(driverName);//加载驱动
         Connection connection = DriverManager.getConnection(url,userName,password);
         PreparedStatement statement = connection.prepareStatement("show databases");

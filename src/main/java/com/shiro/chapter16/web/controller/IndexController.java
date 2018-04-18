@@ -22,6 +22,12 @@ public class IndexController {
     @Autowired private ResourceService resourceService;
     @Autowired private UserService userService;
 
+    /**
+     *
+     * @param loginUser 自定义参数绑定 参数值为{user.id,user.name}这种格式 @CurrentUser user
+     * @param model
+     * @return
+     */
     @RequestMapping("/")
     public String index(@CurrentUser User loginUser, Model model) {
         Set<String> permissions = userService.findPermissions(loginUser.getUsername());

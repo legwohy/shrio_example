@@ -23,6 +23,7 @@
     </context:component-scan>
 
 
+    <!-- 自定义参数绑定解析器-->
     <mvc:annotation-driven>
         <mvc:argument-resolvers>
             <bean class="com.shiro.chapter16.web.bind.method.CurrentUserMethodArgumentResolver"/>
@@ -49,6 +50,7 @@
     <bean id="exceptionHandlerExceptionResolver" class="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver">
     </bean>
 
+    <!-- 自定义全局异常-->
     <bean class="com.shiro.chapter16.web.exception.DefaultExceptionHandler"/>
 
     <import resource="spring-mvc-shiro.xml"/>
