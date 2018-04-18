@@ -42,14 +42,16 @@ public interface UserService {
     User findByUsername(String username);
 
     /**
-     * 根据用户名查找其角色
+     * {@link com.shiro.chapter16.entity.Role}
+     * 根据用户名查找其角色 返回role.getRole 比如 Chairman
      * @param username
      * @return
      */
     Set<String> findRoles(String username);
 
     /**
-     * 根据用户名查找其权限
+     * {@link com.shiro.chapter16.entity.Resource}
+     * 根据用户名查找其权限 权限resource.getPermission 比如 organization:create
      * @param username
      * @return
      */

@@ -20,12 +20,36 @@
 
 </head>
 <body>
-    <form:form method="post" commandName="role">
+    <form method="post" >
+        <div class="form-group">
+            <label>角色名:</label>
+            <input type="text" name="role" value="${role.role}"/>
+        </div>
+
+        <div class="form-group">
+            <label>角色描述:</label>
+            <input type="text" name="description" value="${role.description}"/>
+        </div>
+
+        <div class="form-group">
+            <!-- 后端需要传回改角色下的资源列表-->
+            <label>角色描述:</label>拥有的资源列表：</label>
+            <input type="text" id="resourceName" name="resourceName" value="${zhangfn:resourceNames(role.resourceIds)}" readonly style="width: 300px;">
+            <a id="menuBtn" href="#">选择</a>
+        </div>
+        <button>新增</button>
+    </form>
+    <!-- -->
+  <%--  <form:form method="post" commandName="role">
         <form:hidden path="id"/>
         <form:hidden path="available"/>
 
+
         <div class="form-group">
+            <!-- 相当于<<label for="role"/>->
             <form:label path="role">角色名：</form:label>
+
+            <!-- 相当于<input id='role' name='role' values='Admin' />-->
             <form:input path="role"/>
         </div>
 
@@ -44,7 +68,7 @@
 
         <form:button>${op}</form:button>
 
-    </form:form>
+    </form:form>--%>
 
     <div id="menuContent" class="menuContent" style="display:none; position: absolute;">
         <ul id="tree" class="ztree" style="margin-top:0; width:160px;"></ul>

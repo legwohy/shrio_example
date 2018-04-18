@@ -14,6 +14,26 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
+ * shiro注解
+ * 1、@RequiresAuthentication 验证用户是否登陆
+ * 验证用户是否登录等同于方法subject.isAuthenticated() 结果为true时
+ *
+ * 2、@RequiresUser 验证用户是否记住
+ * 一种是成功登录的（subject.isAuthenticated() 结果为true）；
+ * 另外一种是被记忆的（subject.isRemembered()结果为true）。
+ *
+ * 3、@RequiresGuest 验证用户是否为gust请求，与@RequiresUser完全相反
+ * RequiresUser  == !RequiresGuest。此时subject.getPrincipal() 结果为null.
+ *
+ * 4、@RequiresRoles 验证是否有角色
+ * 比如@RequiresRoles("aRoleName");void someMethod();
+ * 如果subject中有aRoleName角色才可以访问方法someMethod。如果没有这个权限则会抛出异常AuthorizationException。
+ *
+ * 5、@RequiresPermissions 验证是否有权限
+ *   例如： @RequiresPermissions({"file:read", "write:aFile.txt"} )
+ *  void someMethod();
+ *  要求subject中必须同时含有file:read和write:aFile.txt的权限才能执行方法someMethod()。否则抛出异常AuthorizationException。
+ *
  *
  */
 @Controller
@@ -24,7 +44,22 @@ public class UserController {
     @Autowired private OrganizationService organizationService;
     @Autowired private RoleService roleService;
 
-    @RequiresPermissions("user:view")
+    /**
+     * 规则：“资源标识符：操作：对象实例 ID” 即对哪个资源的哪个实例可以进行什么操作。
+     其默认支持通配符权限字符串，“:”表示资源/操作/实例的分割；“,”表示操作的分割；
+     “*”表示任意资源/操作/实例
+     * ":" 分割资源  "," 分割操作
+     * system:user:update,delete 用户拥有system:user 的跟新和删除权限
+     * 资源类型(user,role,resource)：操作(CRUD)：资源ID
+     * user:edit:1001  用户拥有 修改id为1001的用户的 权限
+     * resource:create 用户拥有 创建资源的权限(用户先找角色，通过角色找资源)
+     * 相当于Subject currentUser = SecurityUtils.getSubject();
+     *
+     * a、判断示 if (currentUser.hasPermission("user:view")) {} else {}
+     * b、断言式 currentUser.checkPermission("user:view“)
+     * c、注解式 @RequiresPermissions("user:view")查询用户的权限
+     */
+    @RequiresPermissions("user:view")// 从权限集合中若包含"user:view"字段 表示拥有权限
     @RequestMapping(method = RequestMethod.GET)
     public String list(Model model) {
         model.addAttribute("userList", userService.findAll());

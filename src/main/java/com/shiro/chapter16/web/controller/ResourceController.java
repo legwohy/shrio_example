@@ -21,8 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/resource")
 public class ResourceController {
 
-    @Autowired
-    private ResourceService resourceService;
+    @Autowired private ResourceService resourceService;
 
     @ModelAttribute("types")
     public Resource.ResourceType[] resourceTypes() {

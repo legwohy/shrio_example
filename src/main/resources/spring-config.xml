@@ -52,7 +52,7 @@
         <property name="maxPoolPreparedStatementPerConnectionSize" value="${druid.maxPoolPreparedStatementPerConnectionSize}" />
 
         <!-- 配置监控统计拦截的filters -->
-       <!-- <property name="filters" value="${druid.filters}" />-->
+        <property name="filters" value="${druid.filters}" />
 
     </bean>
 

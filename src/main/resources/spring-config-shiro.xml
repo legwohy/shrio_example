@@ -91,9 +91,9 @@
         <property name="cacheManager" ref="springCacheManager"/>
     </bean>
 
-    <!--                                4、缓存管理器 end                                                -->
+    <!--                                 4、缓存管理器 end                                                -->
 
-    <!--                                5、安全管理器(包括会话、缓存、cookie) start                              -->
+    <!--                                 5、安全管理器(包括会话、缓存、cookie) start                              -->
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
         <property name="realm" ref="userRealm"/>
         <property name="sessionManager" ref="sessionManager"/>
@@ -101,9 +101,9 @@
         <property name="rememberMeManager" ref="rememberMeManager"/>
     </bean>
 
-    <!--                                5、安全管理器 end                                           -->
+    <!--                                  5、安全管理器 end                                           -->
 
-    <!--                                6、shiro过滤器(包含安全管理器) start                             -->
+    <!--                                  6、shiro过滤器(包含安全管理器) start                          -->
     <!-- Shiro的Web过滤器 -->
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
         <!-- Shiro的核心安全接口,这个属性是必须的 -->
@@ -111,6 +111,11 @@
 
         <!-- loginUrl认证提交地址，如果没有认证将会请求此地址进行认证，请求此地址将由formAuthenticationFilter进行表单认证 -->
         <property name="loginUrl" value="/login"/>
+
+        <!--
+        successUrl配置只是做为一种附加配置，只有session中没有用户请求地址时才会使用successUrl。
+        系统默认的是认证成功后跳转到上一次请求的路径，如果是首次请求，那shiro就会跳转到默认虚拟路径“/”，也就是跳转到index.jsp。
+        -->
         <property name="filters">
             <util:map>
 

@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
  * 登陆检查与权限校验
  */
 public class UserRealm extends AuthorizingRealm {
-
     @Autowired private UserService userService;
 
     /**
@@ -27,13 +26,13 @@ public class UserRealm extends AuthorizingRealm {
         String username = (String)principals.getPrimaryPrincipal();
 
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-        authorizationInfo.setRoles(userService.findRoles(username));
-        authorizationInfo.setStringPermissions(userService.findPermissions(username));
+        authorizationInfo.setRoles(userService.findRoles(username));// 用户拥有的角色
+        authorizationInfo.setStringPermissions(userService.findPermissions(username));// 用户拥有的权限
         return authorizationInfo;
     }
 
     /**
-     * 登陆校验
+     * 登陆检查
      * @param token
      * @return
      * @throws AuthenticationException

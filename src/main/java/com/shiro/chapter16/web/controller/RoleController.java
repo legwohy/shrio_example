@@ -20,12 +20,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 @RequestMapping("/role")
 public class RoleController {
-
-    @Autowired
-    private RoleService roleService;
-
-    @Autowired
-    private ResourceService resourceService;
+    @Autowired private RoleService roleService;
+    @Autowired private ResourceService resourceService;
 
     @RequiresPermissions("role:view")
     @RequestMapping(method = RequestMethod.GET)
