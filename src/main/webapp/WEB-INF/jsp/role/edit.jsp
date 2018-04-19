@@ -20,7 +20,7 @@
 
 </head>
 <body>
-    <form method="post" >
+ <%-- <form method="post" >
         <div class="form-group">
             <label>角色名:</label>
             <input type="text" name="role" value="${role.role}"/>
@@ -38,15 +38,17 @@
             <a id="menuBtn" href="#">选择</a>
         </div>
         <button>新增</button>
-    </form>
-    <!-- -->
-  <%--  <form:form method="post" commandName="role">
+    </form>--%>
+
+    <!-- commandName 对应实体属性 method 可以支持delete put action非必需-->
+ <span id="sb">点击此显示权限树</span>
+    <form:form method="post" commandName="role">
         <form:hidden path="id"/>
         <form:hidden path="available"/>
 
 
         <div class="form-group">
-            <!-- 相当于<<label for="role"/>->
+            <!-- 相当于<<label for="role"/>-->
             <form:label path="role">角色名：</form:label>
 
             <!-- 相当于<input id='role' name='role' values='Admin' />-->
@@ -66,33 +68,43 @@
             <a id="menuBtn" href="#">选择</a>
         </div>
 
+        <!-- 提交表单-->
         <form:button>${op}</form:button>
 
-    </form:form>--%>
-
-    <div id="menuContent" class="menuContent" style="display:none; position: absolute;">
-        <ul id="tree" class="ztree" style="margin-top:0; width:160px;"></ul>
+    </form:form>
+    <!-- 权限树-->
+    <div id="menuContent" class="menuContent" style="display:none; position: absolute;" >
+        <span>我也是权限目录树的一部分</span><br/>
+        <ul id="tree" class="ztree" style="margin-top:100px; width:160px;"></ul>
     </div>
 
     <script src="<%=path%>/static/js/jquery-1.11.0.min.js"></script>
     <script src="<%=path%>/static/JQuery zTree v3.5.15/js/jquery.ztree.all-3.5.min.js"></script>
     <script>
+        /** zTree 权限树
+         * a、初始化权限树 $.fn.zTree.init($("#tree"), setting, zNodes);
+         *  1、树的位置 div布局
+         *  2、设置(单复选框,显示样式,节点数据,回调函数)
+         *  3、资源节点 简单样式包括(id,pid,name,checked)
+         * b、显示或隐藏权限树
+         */
         $(function () {
+            // 设置 四个(单复选框,显示样式,节点数据,回调函数)
             var setting = {
-                check: {// tree在点击时的相关设置
-                    enable: true ,// 是否显示单选框radio还是复选框checkBox
+                check: {// 单复选框
+                    enable: true ,// 是否显示radio/checkbox
                     checkboxType: { "Y": "", "N": "" }// YN分别表示复选框勾或取消 ps分别表示操作会影响父子节点
                 },
-                view: {// tree的显示状态
-                    dblClickExpand: false// 双击节点不自动展开
+                view: {// tree的显示样式
+                    dblClickExpand: true// 双击节点自动展开
                 },
                 data: {// tree的数据格式
                     simpleData: {
-                        enable: true// 使用简单的数据格式
+                        enable: true// 使用简单的数据格式 则节点数据必须满足父子关系
                     }
                 },
                 callback: {
-                    onCheck: onCheck// 捕获checkbox和radio的勾选或取消时的回调函数
+                    onCheck: onCheck
                 }
             };
 
@@ -100,53 +112,87 @@
              * id 当前节点id  唯一
              * pid 父节点id   若为null 则当前节点为顶节点
              * name 当前节点名称
-             * childred 子节点(子节点也是json格式) 通常情况四个属性
-             * @type {[*]}
+             * checked 检查状态
              */
+            // 加载所有的资源节点
             var zNodes =[
                 <c:forEach items="${resourceList}" var="r">
                 <c:if test="${not r.rootNode}">
-                { id:${r.id}, pId:${r.parentId}, name:"${r.name}", checked:${zhangfn:in(role.resourceIds, r.id)}},
+                    {
+                        id:${r.id},
+                        pId:${r.parentId},// 基本格式必须有父节点 相当于根据父节点分组
+                        name:"${r.name}",
+                        checked:${zhangfn:in(role.resourceIds, r.id)}// 此资源属于角色下的资源 返回true 勾选复选框
+                    },
                 </c:if>
                 </c:forEach>
             ];
 
+            /** 回调函数 获取选择的内容填充数据*/
             function onCheck(e, treeId, treeNode) {
-                var zTree = $.fn.zTree.getZTreeObj("tree"),// 必须在init之后方可使用此方法 获取id为tree的对象 该对象是全局的
-                        nodes = zTree.getCheckedNodes(true),//
-                        id = "",
-                        name = "";
-                nodes.sort(function compare(a,b){return a.id-b.id;});
-                for (var i=0, l=nodes.length; i<l; i++) {
+                var zTree = $.fn.zTree.getZTreeObj("tree"),// 必须在init初始化之后方可使用此方法 获取id为tree的对象 该对象是全局的
+                    nodes = zTree.getCheckedNodes(true),//输入框 true 勾选的集合 false未勾选的集合
+                    id = "",
+                    name = "";
+                nodes.sort(function compare(a,b){return a.id-b.id;});// 资源id倒叙
+
+                // 取出所有节点的id和name
+                for (var i=0, len=nodes.length; i<len; i++) {
                     id += nodes[i].id + ",";
                     name += nodes[i].name + ",";
                 }
+
+                // 去掉末尾的 "，"
                 if (id.length > 0 ) id = id.substring(0, id.length-1);
                 if (name.length > 0 ) name = name.substring(0, name.length-1);
+
+                // 存入相应的id和资源名称集合
                 $("#resourceIds").val(id);
                 $("#resourceName").val(name);
-//                hideMenu();
+                // hideMenu();
             }
 
+            // 选择按钮 显示权限目录菜单
             function showMenu() {
                 var cityObj = $("#resourceName");
-                var cityOffset = $("#resourceName").offset();
+                var cityOffset = $("#resourceName").offset();// 获取坐标值(top,left)
+
+                // 向下展开权限目录
                 $("#menuContent").css({left:cityOffset.left + "px", top:cityOffset.top + cityObj.outerHeight() + "px"}).slideDown("fast");
 
+                // 鼠标按下事件
                 $("body").bind("mousedown", onBodyDown);
             }
-            function hideMenu() {
-                $("#menuContent").fadeOut("fast");
-                $("body").unbind("mousedown", onBodyDown);
-            }
+
+            // 鼠标按下隐藏权限树
             function onBodyDown(event) {
                 if (!(event.target.id == "menuBtn" || event.target.id == "menuContent" || $(event.target).parents("#menuContent").length>0)) {
                     hideMenu();
                 }
             }
 
-            $.fn.zTree.init($("#tree"), setting, zNodes);// 初始化
-            $("#menuBtn").click(showMenu);
+            // 隐藏权限树方法
+            function hideMenu() {
+                $("#menuContent").fadeOut("fast");
+                $("body").unbind("mousedown", onBodyDown);
+            }
+
+
+            $.fn.zTree.init($("#tree"), setting, zNodes);// 初始化(tree布局,设置,节点)
+            $("#menuBtn").click(showMenu);// 选择按钮 显示权限目录菜单 总开关
+
+            var status=1;
+
+            $("#sb").click(function () {
+                if(status == 1){
+                    $("#menuContent").slideDown("fast");
+                    status=2;
+                }else if(status == 2){
+                    $("#menuContent").fadeOut("fast");
+                    status = 1;
+                }
+
+            });
         });
     </script>
 

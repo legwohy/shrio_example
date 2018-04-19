@@ -33,7 +33,7 @@ public class RoleController {
     @RequiresPermissions("role:create")
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     public String showCreateForm(Model model) {
-        setCommonData(model);
+        setCommonData(model);// 所有资源列表
         model.addAttribute("role", new Role());
         model.addAttribute("op", "新增");
         return "role/edit";
@@ -50,7 +50,7 @@ public class RoleController {
     @RequiresPermissions("role:update")
     @RequestMapping(value = "/{id}/update", method = RequestMethod.GET)
     public String showUpdateForm(@PathVariable("id") Long id, Model model) {
-        setCommonData(model);
+        setCommonData(model);// 所有资源列表
         model.addAttribute("role", roleService.findOne(id));
         model.addAttribute("op", "修改");
         return "role/edit";
