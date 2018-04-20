@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService {
     @Autowired private RoleService roleService;
 
     /**
-     * 创建用户
+     * 创建用户才加密
      * @param user
      */
     public User createUser(User user) {

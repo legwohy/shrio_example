@@ -15,13 +15,12 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class PasswordHelper {
-
-    private RandomNumberGenerator randomNumberGenerator = new SecureRandomNumberGenerator();
+    private RandomNumberGenerator randomNumberGenerator = new SecureRandomNumberGenerator();// 随机数生成器
 
     @Value("${password.algorithmName}")
-    private String algorithmName = "md5";
+    private String algorithmName = "md5";// 算法名称
     @Value("${password.hashIterations}")
-    private int hashIterations = 2;
+    private int hashIterations = 2;// 生成hash值的迭代次数
 
     public void setRandomNumberGenerator(RandomNumberGenerator randomNumberGenerator) {
         this.randomNumberGenerator = randomNumberGenerator;
@@ -41,13 +40,14 @@ public class PasswordHelper {
      */
     public void encryptPassword(User user) {
 
-        user.setSalt(randomNumberGenerator.nextBytes().toHex());
+        user.setSalt(randomNumberGenerator.nextBytes().toHex());// 设置的盐为 随机的bytes(-126,127) 转为16进制
 
         String newPassword = new SimpleHash(
-                algorithmName,
-                user.getPassword(),
-                ByteSource.Util.bytes(user.getCredentialsSalt()),
-                hashIterations).toHex();
+                algorithmName,// 算法
+                user.getPassword(),// 待加密的文本
+                ByteSource.Util.bytes(user.getCredentialsSalt()),// 盐转换为字节
+                hashIterations// 迭代次数
+        ).toHex();
 
         user.setPassword(newPassword);
     }

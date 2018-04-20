@@ -54,7 +54,7 @@
         <!-- 如果您在cookie中设置了HttpOnly属性，那么通过js脚本将无法读取到cookie信息，这样能有效的防止XSS攻击-->
         <property name="httpOnly" value="true"/>
 
-        <property name="maxAge" value="-1"/><!-- 30天 2592000-->
+        <property name="maxAge" value="2592000"/><!-- 30天 2592000-->
     </bean>
 
     <!--                              2、cookie管理器 end                                                     -->
@@ -158,7 +158,6 @@
         <property name="arguments" ref="securityManager"/>
     </bean>
     <!-- 基于Form表单的身份验证过滤器 登陆失败java设置 -->
-    <!-- login.jsp 的<shiro:> 标签将会传到此作为验证-->
     <bean id="formAuthenticationFilter" class="org.apache.shiro.web.filter.authc.FormAuthenticationFilter">
         <property name="usernameParam" value="username"/>
         <property name="passwordParam" value="password"/>
