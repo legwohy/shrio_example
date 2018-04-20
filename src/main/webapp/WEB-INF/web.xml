@@ -58,7 +58,7 @@
 
     <filter-mapping>
         <filter-name>shiroFilter</filter-name>
-        <url-pattern>/mi/*</url-pattern>
+        <url-pattern>/*</url-pattern>
         <dispatcher>REQUEST</dispatcher>
     </filter-mapping>
 
@@ -74,7 +74,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>spring</servlet-name>
-        <url-pattern>/mi/*</url-pattern>
+        <url-pattern>/</url-pattern>
     </servlet-mapping>
 
 </web-app>

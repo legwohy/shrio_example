@@ -11,13 +11,14 @@ import java.util.Date;
 
 /**
  * FormAuthenticationFilter 登陆验证成功返回的url为进入登陆表单的那个url，所以想要进入主页，只能从根目录进入
- * 表单控制器，校验成功会进入主页/WEB-INF/jsp/index.jsp
+ * 表单控制器，校验成功会进入主页/WEB-INF/jsp/ins.jsp
  */
 @Controller
 public class LoginController {
 
     /**
-     * 表单认证 xml需要配置 FormAuthenticationFilter 登陆失败
+     *  post提交的参数将会被 FormAuthenticationFilter 拦截，拦截验证失败将会转至此url(loginUrl)，验证成功会转至successUrl
+     *
      * DisabledAccountException （禁用的帐号）
      * LockedAccountException （锁定的帐号）
      * UnknownAccountException（错误的帐号）
@@ -41,6 +42,8 @@ public class LoginController {
         }
         model.addAttribute("error", error);
         System.out.println("login当前时间:"+new Date());
+
+        // 此方法不处理登陆成功（认证成功），shiro认证成功会自动跳转到上一个请求路径
         return "login";
     }
 
