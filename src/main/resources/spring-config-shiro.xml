@@ -37,8 +37,9 @@
         <property name="cookie" ref="rememberMeCookie"/>
     </bean>
 
-    <!-- 会话Cookie模板 -->
+    <!-- 会话Cookie模板 session与cookie必须建立县里-->
     <bean id="sessionIdCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
+        <!-- Tomcat容器默认名字为jessionid-->
         <constructor-arg value="sid"/>
         <property name="httpOnly" value="true"/>
 
@@ -47,40 +48,61 @@
     </bean>
 
 
-    <!-- cookie配置-->
+    <!-- 表单提交 rememberMe 的cookie-->
     <bean id="rememberMeCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
         <constructor-arg value="rememberMe"/>
 
         <!-- 如果您在cookie中设置了HttpOnly属性，那么通过js脚本将无法读取到cookie信息，这样能有效的防止XSS攻击-->
         <property name="httpOnly" value="true"/>
 
+        <!-- 定义cookie的过期时间-->
         <property name="maxAge" value="2592000"/><!-- 30天 2592000-->
     </bean>
 
     <!--                              2、cookie管理器 end                                                     -->
 
-    <!--                              3、会话管理器(包括cookie) start                                            -->
+    <!--                              3、会话管理器(调度器和cookie) start                                            -->
     <!-- 会话管理器 -->
     <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+        <!-- 全局会话时间 本时间超过web.xml配置的时间-->
         <property name="globalSessionTimeout" value="1800000"/>
+
+        <!-- 删除无效的session-->
         <property name="deleteInvalidSessions" value="true"/>
+
+        <!-- session定时任务开关-->
         <property name="sessionValidationSchedulerEnabled" value="true"/>
+
+        <!-- session 调度器 会话过期检查-->
         <property name="sessionValidationScheduler" ref="sessionValidationScheduler"/>
         <property name="sessionDAO" ref="sessionDAO"/>
+
+        <!-- 开启session的cookie-->
         <property name="sessionIdCookieEnabled" value="true"/>
+
+        <!-- session必须与cookie建立联系方可意义-->
+        <!-- 所有的session一定要将id设置到Cookie之中，需要提供有Cookie的操作模版 cookie必须与sessionId放在一起-->
         <property name="sessionIdCookie" ref="sessionIdCookie"/>
     </bean>
 
     <!-- 会话ID生成器 -->
     <bean id="sessionIdGenerator" class="org.apache.shiro.session.mgt.eis.JavaUuidSessionIdGenerator"/>
-    <!-- 会话DAO -->
+    <!-- 会话DAO 会话缓存的位置 -->
     <bean id="sessionDAO" class="org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO">
+        <!-- 缓存的名字 名字不限定-->
         <property name="activeSessionsCacheName" value="shiro-activeSessionCache"/>
+
+        <!-- 当前会话的id-->
         <property name="sessionIdGenerator" ref="sessionIdGenerator"/>
     </bean>
-    <!-- 会话验证调度器 -->
+    <!-- 会话验证调度器
+    所有的 session 一定要在用户正确离开之后才能够进行资源的释放，但是用户如果不点注销，
+    不能够进行 session 的清空处理，所以为了防止这样的问题，还需要增加有一个会话的验证调度器。  -->
     <bean id="sessionValidationScheduler" class="org.apache.shiro.session.mgt.quartz.QuartzSessionValidationScheduler">
+        <!-- 调度时间 定时任务 毫秒-->
         <property name="sessionValidationInterval" value="1800000"/>
+
+        <!-- 引用会话管理-->
         <property name="sessionManager" ref="sessionManager"/>
     </bean>
 
@@ -93,7 +115,7 @@
 
     <!--                                 4、缓存管理器 end                                                -->
 
-    <!--                                 5、安全管理器(包括会话、缓存、cookie) start                              -->
+    <!--                                 5、安全管理器(包括会话、缓存、记住我) start                              -->
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
         <property name="realm" ref="userRealm"/>
         <property name="sessionManager" ref="sessionManager"/>

@@ -1,5 +1,6 @@
 package com.shiro.chapter16.web.controller;
 
+import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.springframework.stereotype.Controller;
@@ -37,11 +38,13 @@ public class LoginController {
             error = "用户名/密码错误";// admin 123456
         } else if(IncorrectCredentialsException.class.getName().equals(exceptionClassName)) {
             error = "用户名/密码错误";
-        } else if(exceptionClassName != null) {
+        }else if(AuthenticationException.class.getName().equals(exceptionClassName)){
+            error = "未校验权限"+exceptionClassName;
+        } else  {
             error = "其他错误：" + exceptionClassName;
         }
         model.addAttribute("error", error);
-        System.out.println("login当前时间:"+new Date());
+        System.out.println("login当前时间:"+req.getParameter("username"));
 
         // 此方法不处理登陆成功（认证成功），shiro认证成功会自动跳转到上一个请求路径
         return "login";

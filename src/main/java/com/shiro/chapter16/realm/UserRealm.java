@@ -2,6 +2,7 @@ package com.shiro.chapter16.realm;
 
 import com.shiro.chapter16.entity.User;
 import com.shiro.chapter16.service.UserService;
+import com.shiro.chapter16.service.impl.ShiroSessionHelp;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class UserRealm extends AuthorizingRealm {
     @Autowired private UserService userService;
+    @Autowired private ShiroSessionHelp shiroSessionHelp;
 
     /**
      * 权限校验
@@ -48,6 +50,11 @@ public class UserRealm extends AuthorizingRealm {
 
         if(Boolean.TRUE.equals(user.getLocked())) {
             throw new LockedAccountException(); //帐号锁定
+        }
+
+        // 剔除用户
+        if(shiroSessionHelp.removeSession(username)){
+            throw new UnknownAccountException();// 没有找到账号
         }
 
         //交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配，
